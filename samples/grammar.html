@@ -1,0 +1,51 @@
+<link rel="stylesheet" type="text/css" href="style.css">
+<pre><code>
+<div class="ruleset">
+<span class="title">Grammar</span>
+<div class="grammar-rule"><span id="grammar-file" class="grammar-rule-id">grammar-file</span><span class="grammar-symbol">:</span>
+  <a href="#ruleset">ruleset</a><span class="grammar-symbol">*</span></div>
+<div class="grammar-rule"><span id="ruleset" class="grammar-rule-id">ruleset</span><span class="grammar-symbol">:</span> <span class="grammar-usedby">(used by <a href="#grammar-file">grammar-file</a>)</span>
+  <a href="#comment">comment</a> <a href="#newline">newline</a><span class="grammar-symbol">+</span> <span class="grammar-symbol">(</span> <a href="#rule">rule</a> <span class="grammar-symbol">|</span> <a href="#newline">newline</a> <span class="grammar-symbol">)</span><span class="grammar-symbol">+</span></div>
+<div class="grammar-rule"><span id="rule" class="grammar-rule-id">rule</span><span class="grammar-symbol">:</span> <span class="grammar-usedby">(used by <a href="#ruleset">ruleset</a>)</span>
+  <a href="#identifier">identifier</a> <span class="grammar-literal">:</span> <a href="#expr-choice">expr-choice</a></div>
+
+
+</div>
+
+<div class="ruleset">
+<span class="title">Expression</span>
+<div class="grammar-rule"><span id="expr-choice" class="grammar-rule-id">expr-choice</span><span class="grammar-symbol">:</span> <span class="grammar-usedby">(used by <a href="#rule">rule</a>, <a href="#expr-group">expr-group</a>)</span>
+  <a href="#expr-sequence">expr-sequence</a> <span class="grammar-symbol">(</span> <span class="grammar-literal">|</span> <a href="#expr-sequence">expr-sequence</a> <span class="grammar-symbol">)</span><span class="grammar-symbol">*</span></div>
+<div class="grammar-rule"><span id="expr-sequence" class="grammar-rule-id">expr-sequence</span><span class="grammar-symbol">:</span> <span class="grammar-usedby">(used by <a href="#expr-choice">expr-choice</a>)</span>
+  <a href="#expr-negate">expr-negate</a><span class="grammar-symbol">+</span></div>
+<div class="grammar-rule"><span id="expr-negate" class="grammar-rule-id">expr-negate</span><span class="grammar-symbol">:</span> <span class="grammar-usedby">(used by <a href="#expr-sequence">expr-sequence</a>)</span>
+  <span class="grammar-literal">~</span><span class="grammar-symbol">?</span> <a href="#expr-quantified">expr-quantified</a></div>
+<div class="grammar-rule"><span id="expr-quantified" class="grammar-rule-id">expr-quantified</span><span class="grammar-symbol">:</span> <span class="grammar-usedby">(used by <a href="#expr-negate">expr-negate</a>)</span>
+  <a href="#expr-group">expr-group</a> <a href="#quantifier">quantifier</a><span class="grammar-symbol">?</span></div>
+<div class="grammar-rule"><span id="expr-group" class="grammar-rule-id">expr-group</span><span class="grammar-symbol">:</span> <span class="grammar-usedby">(used by <a href="#expr-quantified">expr-quantified</a>)</span>
+  <span class="grammar-literal">(</span> <a href="#expr-choice">expr-choice</a> <span class="grammar-literal">)</span> <span class="grammar-symbol">|</span> <a href="#expr-primary">expr-primary</a></div>
+<div class="grammar-rule"><span id="expr-primary" class="grammar-rule-id">expr-primary</span><span class="grammar-symbol">:</span> <span class="grammar-usedby">(used by <a href="#expr-group">expr-group</a>)</span>
+  <a href="#literal-string">literal-string</a> <span class="grammar-symbol">|</span> <a href="#regex">regex</a> <span class="grammar-symbol">|</span> <a href="#identifier">identifier</a></div>
+
+
+</div>
+
+<div class="ruleset">
+<span class="title">Lexical Grammar</span>
+<div class="grammar-rule"><span id="quantifier" class="grammar-rule-id">quantifier</span><span class="grammar-symbol">:</span> <span class="grammar-usedby">(used by <a href="#expr-quantified">expr-quantified</a>)</span>
+  <span class="grammar-literal">?</span> <span class="grammar-symbol">|</span> <span class="grammar-literal">+</span> <span class="grammar-symbol">|</span> <span class="grammar-literal">*</span></div>
+<div class="grammar-rule"><span id="newline" class="grammar-rule-id">newline</span><span class="grammar-symbol">:</span> <span class="grammar-usedby">(used by <a href="#ruleset">ruleset</a>)</span>
+  <span class="grammar-regex">[ \t\n]*</span> <span class="grammar-regex">[\n]</span></div>
+<div class="grammar-rule"><span id="comment" class="grammar-rule-id">comment</span><span class="grammar-symbol">:</span> <span class="grammar-usedby">(used by <a href="#ruleset">ruleset</a>)</span>
+  <span class="grammar-literal">#</span> <span class="grammar-regex">~[\n]</span></div>
+<div class="grammar-rule"><span id="identifier" class="grammar-rule-id">identifier</span><span class="grammar-symbol">:</span> <span class="grammar-usedby">(used by <a href="#rule">rule</a>, <a href="#expr-primary">expr-primary</a>)</span>
+  <span class="grammar-regex">[a-zA-Z]</span> <span class="grammar-regex">[a-zA-Z-]*</span></div>
+<div class="grammar-rule"><span id="literal-string" class="grammar-rule-id">literal-string</span><span class="grammar-symbol">:</span> <span class="grammar-usedby">(used by <a href="#expr-primary">expr-primary</a>)</span>
+  <span class="grammar-literal">"</span> <span class="grammar-regex">~["]</span> <span class="grammar-literal">"</span></div>
+<div class="grammar-rule"><span id="regex" class="grammar-rule-id">regex</span><span class="grammar-symbol">:</span> <span class="grammar-usedby">(used by <a href="#expr-primary">expr-primary</a>)</span>
+  <span class="grammar-literal">~</span><span class="grammar-symbol">?</span> <span class="grammar-literal">[</span> <span class="grammar-regex">~[\\[]</span> <span class="grammar-symbol">|</span> <span class="grammar-literal">]</span> <span class="grammar-regex">[+?*]?</span></div>
+
+
+</div>
+
+</code></pre>
