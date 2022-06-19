@@ -1,0 +1,49 @@
+name: release
+
+on: [push, pull_request]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  release-linux-x64:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install Rust
+        run: bin/install_rust_latest.sh
+      - name: Environment
+        run: |
+          uname -a
+          cargo --version
+      - name: set Version
+        run: echo VERSION=$(bin/version.sh) >> $GITHUB_ENV
+      - name: Release Linux
+        run: bin/release.sh linux
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-linux-x64-artifacts
+          path: target/upload/*
+
+  release-osx-x64:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install Rust
+        run: bin/install_rust_latest.sh
+      - name: Environment
+        run: |
+          uname -a
+          cargo --version
+      - name: set Version
+        run: echo VERSION=$(bin/version.sh) >> $GITHUB_ENV
+      - name: Build
+        run: bin/release.sh osx
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-osx-x64-artifacts
+          path: target/upload/*

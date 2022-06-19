@@ -1,0 +1,43 @@
+# Grammar
+
+grammar-file: ruleset*
+
+ruleset: comment newline+ (rule|newline)+
+
+rule: identifier ":" expr-choice
+
+
+# Expression
+
+expr-choice: expr-sequence ("|" expr-sequence)*
+
+expr-sequence: expr-negate+
+
+expr-negate: "~"? expr-quantified
+
+expr-quantified: expr-group quantifier?
+
+expr-group: "(" expr-choice ")" | expr-primary
+
+expr-primary: literal-string | regex | identifier
+
+
+
+
+
+# Lexical Grammar
+
+quantifier: "?" | "+" | "*"
+
+newline:  [ \t\n]*[\n]
+
+comment: "#" ~[\n]
+
+identifier: [a-zA-Z][a-zA-Z-]*
+
+literal-string: "\"" ~["] "\""
+
+regex: "~"? "[" ~[\\[] |  "]" [+?*]?
+
+
+

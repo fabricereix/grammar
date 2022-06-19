@@ -1,0 +1,30 @@
+name: test
+
+on: [push, pull_request]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+
+  test-ubuntu-x64:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rust: [stable]
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Install Rust
+      run: bin/install_rust_latest.sh
+    - name: Environment
+      run: |
+        uname -a
+        cargo --version
+    - name: Build
+      run: bin/build.sh
+    - name: Run Unit Tests
+      run: bin/test_unit.sh
+    - name: Run Integ Tests
+      run: bin/test_integ.sh
+

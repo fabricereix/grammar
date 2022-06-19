@@ -1,0 +1,26 @@
+# Postal Address
+
+postal-address: name-part street-address zip-part
+
+name-part: personal-part last-name opt-suffix-part | personal-part name-part
+
+personal-part: initial "." | first-name
+
+street-address: house-num street-name opt-apt-num
+
+zip-part: town-name "," state-code ZIP-code
+
+opt-suffix-part: "Sr." | "Jr." | ""
+
+opt-apt-num: apt-num | ""
+
+last-name: "TBD"
+first-name: "TBD"
+initial: "TBD"
+house-num: "TBD"
+street-name: "TBD"
+town-name: "TBD"
+ZIP-code: "TBD"
+apt-num: "TBD"
+state-code: "TBD"
+
