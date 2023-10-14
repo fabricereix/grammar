@@ -73,8 +73,7 @@ impl Comment {
 fn comment_to_id(value: &str) -> String {
     value
         .to_lowercase()
-        .replace('/', "-")
-        .replace(' ', "-")
+        .replace(['/', ' '], "-")
         .replace("----", "-")
         .replace("---", "-")
         .replace("--", "-")

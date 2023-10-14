@@ -21,7 +21,7 @@ fn get_content(options: &CliOptions) -> String {
         }
         Some(input_file) => {
             let mut s = String::new();
-            let mut f = File::open(&input_file).expect("Unable to open file");
+            let mut f = File::open(input_file).expect("Unable to open file");
             f.read_to_string(&mut s).expect("Unable to read string");
             s
         }
