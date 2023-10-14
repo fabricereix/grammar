@@ -53,7 +53,10 @@ pub fn parse_options() -> CliOptions {
     };
 
     let verbose = matches.is_present("verbose");
-    let section_header = matches.value_of("section_header").unwrap_or_default().to_string();
+    let section_header = matches
+        .value_of("section_header")
+        .unwrap_or_default()
+        .to_string();
     let section_id = matches.is_present("section_id");
     if input_file.is_none() && atty::is(atty::Stream::Stdin) {
         command.clone().print_help().unwrap();
@@ -64,6 +67,6 @@ pub fn parse_options() -> CliOptions {
         input_file,
         verbose,
         section_header,
-        section_id
+        section_id,
     }
 }

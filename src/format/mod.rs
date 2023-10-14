@@ -2,31 +2,55 @@ use super::{Comment, Expression, ExpressionKind, Grammar, Rule, RuleSet};
 use crate::Quantifier;
 use std::collections::HashMap;
 
-
 pub fn format_html(g: &Grammar, s: &str, section_header: &str, section_id: bool) -> String {
     let non_terminals = g.non_terminals();
     g.to_html(s, &non_terminals, section_header, section_id)
 }
 
 impl Grammar {
-    pub fn to_html(&self, input: &str, used_by: &HashMap<String, Vec<String>>, section_header: &str, section_id: bool) -> String {
+    pub fn to_html(
+        &self,
+        input: &str,
+        used_by: &HashMap<String, Vec<String>>,
+        section_header: &str,
+        section_id: bool,
+    ) -> String {
         let mut s = "".to_string();
         for ruleset in &self.rulesets {
-            s.push_str(ruleset.to_html(input, used_by, section_header, section_id).as_str());
+            s.push_str(
+                ruleset
+                    .to_html(input, used_by, section_header, section_id)
+                    .as_str(),
+            );
         }
         s
     }
 }
 
 impl RuleSet {
-    pub fn to_html(&self, input: &str, used_by: &HashMap<String, Vec<String>>, section_header: &str, section_id: bool) -> String {
+    pub fn to_html(
+        &self,
+        input: &str,
+        used_by: &HashMap<String, Vec<String>>,
+        section_header: &str,
+        section_id: bool,
+    ) -> String {
         let mut s = r#"<div class="grammar-ruleset">"#.to_string();
         let section_id = if section_id {
-           format!(" id=\"{}\"", encode_html(&comment_to_id(&self.comment.value)))
+            format!(
+                " id=\"{}\"",
+                encode_html(&comment_to_id(&self.comment.value))
+            )
         } else {
             "".to_string()
         };
-        s.push_str(format!(r#"<{section_header}{section_id}>{}</{section_header}>"#, self.comment.to_html()).as_str());
+        s.push_str(
+            format!(
+                r#"<{section_header}{section_id}>{}</{section_header}>"#,
+                self.comment.to_html()
+            )
+            .as_str(),
+        );
 
         for rule in &self.rules {
             let used_by = match used_by.get(&rule.id) {
@@ -47,15 +71,14 @@ impl Comment {
 }
 
 fn comment_to_id(value: &str) -> String {
-   value
-       .to_lowercase()
-       .replace('/', "-")
-       .replace(' ', "-")
-       .replace("----", "-")
-       .replace("---", "-")
-       .replace("--", "-")
+    value
+        .to_lowercase()
+        .replace('/', "-")
+        .replace(' ', "-")
+        .replace("----", "-")
+        .replace("---", "-")
+        .replace("--", "-")
 }
-
 
 impl Rule {
     pub fn to_html(&self, input: &str, used_by: &[String]) -> String {
@@ -370,7 +393,10 @@ mod tests {
 
     #[test]
     fn test_comment_to_id() {
-        assert_eq!(comment_to_id("Template / Expression"), "template-expression");
+        assert_eq!(
+            comment_to_id("Template / Expression"),
+            "template-expression"
+        );
         assert_eq!(comment_to_id("Lexical Grammar"), "lexical-grammar");
     }
 }

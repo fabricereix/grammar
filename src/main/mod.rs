@@ -51,7 +51,10 @@ fn main() {
         ExitCode::ErrorValidation.exit()
     }
 
-    println!("{}", format_html(&g, &content, &options.section_header, options.section_id));
+    println!(
+        "{}",
+        format_html(&g, &content, &options.section_header, options.section_id)
+    );
     ExitCode::Success.exit()
 }
 
