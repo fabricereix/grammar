@@ -4,6 +4,8 @@ use std::path::PathBuf;
 pub struct CliOptions {
     pub verbose: bool,
     pub input_file: Option<PathBuf>,
+    pub section_header: String,
+    pub section_id: bool,
 }
 
 // clap (unfortunately) panics when options are not good
@@ -18,6 +20,18 @@ pub fn parse_options() -> CliOptions {
             clap::Arg::new("INPUT")
                 .help("Sets the input file to use")
                 .required(false),
+        )
+        .arg(
+            clap::Arg::new("section_id")
+                .long("section-id")
+                .help("Add section id"),
+        )
+        .arg(
+            clap::Arg::new("section_header")
+                .long("section-header")
+                .takes_value(true)
+                .default_value("h2")
+                .help("Specify section header"),
         )
         .arg(
             clap::Arg::new("verbose")
@@ -39,6 +53,8 @@ pub fn parse_options() -> CliOptions {
     };
 
     let verbose = matches.is_present("verbose");
+    let section_header = matches.value_of("section_header").unwrap_or_default().to_string();
+    let section_id = matches.is_present("section_id");
     if input_file.is_none() && atty::is(atty::Stream::Stdin) {
         command.clone().print_help().unwrap();
         std::process::exit(2);
@@ -47,5 +63,7 @@ pub fn parse_options() -> CliOptions {
     CliOptions {
         input_file,
         verbose,
+        section_header,
+        section_id
     }
 }

@@ -166,6 +166,7 @@ impl Parser {
         }) = self.peek()
         {
             self.next();
+            let value = value.trim().to_string();
             Some(Comment { span, value })
         } else {
             None
